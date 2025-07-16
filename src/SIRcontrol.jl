@@ -1,4 +1,4 @@
-module CTApp
+module SIRcontrol
 
 greet() = print("Hello World!")
 
