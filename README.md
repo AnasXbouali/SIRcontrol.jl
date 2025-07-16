@@ -1,4 +1,4 @@
-# CTApp.jl
+# SIRcontrol.jl
 
 This repository is a template to create an application or a package for the [control-toolbox ecosystem](https://github.com/control-toolbox). 
 
