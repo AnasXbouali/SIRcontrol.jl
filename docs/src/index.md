@@ -1,6 +1,6 @@
-# CTApp
+# SIRcontrol
 
-Documentation for [CTApp](https://github.com/control-toolbox/CTApp.jl).
+Documentation for [SIRcontrol](https://github.com/AnasXbouali/SIRcontrol.jl).
 
 ## Reproducibility
 
