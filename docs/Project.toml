@@ -1,12 +1,5 @@
 [deps]
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
-DifferentialEquations = "0c46a032-eb83-5123-abaf-570d42b7f3b5"
-LaTeXStrings = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
-MadNLP = "95c27259-d335-4813-b541-c151127579b7"
-NLPModelsIpopt = "24713997-e542-5f65-8176-3712803b98b5"
-OptimalControl = "dcfb8700-116b-4f77-9426-3d2315b70644"
-Plots = "91a5bc22-3556-55d7-bb6b-4395e1e1957c"
-Roots = "f2b01f46-fcfa-551c-844a-d8ac1e18e54b"
 
 [compat]
 Documenter = "1"
