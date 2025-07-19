@@ -169,21 +169,6 @@ plot!([t_sol1, t_sol1], [0, 0.1], linestyle = :dash, lw = 2, label = L"t_c^*")
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## Case 2: $\beta = 0.9$ and $\bar{u} = 0.5$
 
 

@@ -1,4 +1,4 @@
-# 🧪 On the Problem of Minimizing the Epidemic Final Size for SIR Model via Social Distancing
+# 🧪 On the problem of minimizing the epidemic final size for SIR model via social distancing
 
 ## 📘 Introduction
 
@@ -6,7 +6,7 @@
 
 We revisit the problem of minimizing the epidemic final size in the **SIR model** through **social distancing interventions**.
 
-Traditionally, this problem assumes a fixed **interval structure** for the timing of interventions. In contrast, we investigate a more flexible approach: **\$L^1\$-constrained controls** that limit total intervention effort, rather than when and how it's applied.
+Traditionally, this problem assumes a fixed **interval structure** for the timing of interventions. In contrast, we investigate a more flexible approach: **$L^1$-constrained controls** that limit total intervention effort, rather than when and how it's applied.
 
 Key insight:
 
