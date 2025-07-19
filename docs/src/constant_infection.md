@@ -56,7 +56,29 @@ sol1 = SIRocp(tf, S0, I0, Q, β[1], γ, umax[1])
 sol2 = SIRocp(tf, S0, I0, Q, β[2], γ, umax[2])
 ```
 
-# First case: $\beta = 0.6$ and $\bar{u} = 0.9$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Case 1: $\beta = 0.6$ and $\bar{u} = 0.9$
 
 ```@example main
 gr()
@@ -89,40 +111,7 @@ t_sol1 = t[findfirst(i -> abs(control(sol1)(t[i])[1]) > 0.9*umax[1], 2:length(t)
 nothing
 ```
 
-# Second case: $\beta = 0.9$ and $\bar{u} = 0.5$
-
-```@example main
-gr()
-
-plot(
-    t -> state(sol2)(t)[1], 0, tf,
-    label = L"$S$", color = :darkblue, lw = 2,
-    grid = false
-)
-
-plot!(
-    t -> state(sol2)(t)[2], 0, tf,
-    label = L"$I$", color = :darkgreen, lw = 2
-)
-
-plot!(
-    [0, tf], [γ/β[2], γ/β[2]],
-    label = L"$S_h$", lw = 2, ls = :dash, color = :black
-)
-plot!(
-    t -> control(sol2)(t)[1], 0, tf,
-    label = L"$u$", color = :darkred, lw = 2,
-    grid = false
-)
-```
-
-```@example main
-t = 0:1e-4:tf
-t_sol2 = t[findfirst(i -> abs(control(sol2)(t[i])[1]) >  umax[2], 2:length(t))] # intervention time
-nothing
-```
-
-# Plot of $\log(S(t_c)) - \log(S(t_c+\Delta))$
+## Case 1: Plot of $\log(S(t_c)) - \log(S(t_c+\Delta))$
 
 ```@example main
 Δ1 = Q / umax[1]
@@ -172,7 +161,65 @@ plot(tcs, result_values;
 plot!([t_sol1, t_sol1], [0, 0.1], linestyle = :dash, lw = 2, label = L"t_c^*")
 ```
 
-# Second case: $\beta = 0.9$ and $\bar{u} = 0.5$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Case 2: $\beta = 0.9$ and $\bar{u} = 0.5$
+
+
+```@example main
+gr()
+
+plot(
+    t -> state(sol2)(t)[1], 0, tf,
+    label = L"$S$", color = :darkblue, lw = 2,
+    grid = false
+)
+
+plot!(
+    t -> state(sol2)(t)[2], 0, tf,
+    label = L"$I$", color = :darkgreen, lw = 2
+)
+
+plot!(
+    [0, tf], [γ/β[2], γ/β[2]],
+    label = L"$S_h$", lw = 2, ls = :dash, color = :black
+)
+plot!(
+    t -> control(sol2)(t)[1], 0, tf,
+    label = L"$u$", color = :darkred, lw = 2,
+    grid = false
+)
+```
+
+```@example main
+t = 0:1e-4:tf
+t_sol2 = t[findfirst(i -> abs(control(sol2)(t[i])[1]) >  umax[2], 2:length(t))] # intervention time
+nothing
+```
+
+## Case 2: Plot of $\log(S(t_c)) - \log(S(t_c+\Delta))$
+
 
 ```@example main
 Δ2 = Q / umax[2]
