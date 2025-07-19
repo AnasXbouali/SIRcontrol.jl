@@ -1,5 +1,5 @@
 ```@example main
-using OptimalControl, NLPModelsIpopt, MadNLP, DifferentialEquations, Plots, Plots.PlotMeasures, LaTeXStrings,Roots
+using OptimalControl, NLPModelsIpopt, DifferentialEquations, Plots, Plots.PlotMeasures, LaTeXStrings,Roots
 nothing
 ```
 
