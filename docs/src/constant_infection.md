@@ -33,7 +33,7 @@ function SIRocp(tf, S0, I0, Q, β, γ, umax)
 	    sol = solve(ocp, :direct, :adnlp, :ipopt; 
 	                    disc_method = :gauss_legendre_3, 
 	                    grid_size=1000, 
-                        tol=1e-9, 
+                            tol=1e-9, 
 	                    display=true)
             return sol
 end
