@@ -1,8 +1,6 @@
 ```julia
-using OptimalControl, NLPModelsIpopt, DifferentialEquations, Plots, Plots.PlotMeasures, LaTeXStrings,Roots
-nothing
+using OptimalControl, NLPModelsIpopt, DifferentialEquations, Plots, Plots.PlotMeasures, LaTeXStrings, Roots
 ```
-
 
 
 ```julia
