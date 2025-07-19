@@ -40,7 +40,7 @@ These validate the analytical results and quantify the differences between inter
 
 ---
 
-## ⚙️ The SIR Model with Control
+## ⚙️ The SIR Model with Control 
 
 ### **System Dynamics**
 
