@@ -1,11 +1,11 @@
-```@example main
+```julia
 using OptimalControl, NLPModelsIpopt, DifferentialEquations, Plots, Plots.PlotMeasures, LaTeXStrings,Roots
 nothing
 ```
 
 
 
-```@example main
+```julia
 function SIRocp(tf, S0, I0, Q, β, γ, umax)
 	    ocp = @def begin
 	        t ∈ [0, tf], time
