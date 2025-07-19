@@ -35,6 +35,6 @@ function SIRocp(tf, S0, I0, Q, β, γ, umax)
 	                    grid_size=1000, 
                         tol=1e-9, 
 	                    display=true)
-	    return sol
-	end
+            return sol
+end
 ```
