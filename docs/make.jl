@@ -19,13 +19,11 @@ makedocs(;
             asset("https://control-toolbox.org/assets/js/documentation.js"),
         ],
     ),
-    pages = [
+    pages=[
         "Introduction" => "index.md",
         "Constant β" => "constant_infection.md",
         "Piecewise constant β" => "variable_infection.md",
     ],
-
-
 )
 
 deploydocs(; repo=repo_url * ".git", devbranch="main")
