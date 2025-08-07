@@ -9,4 +9,10 @@ Roots = "f2b01f46-fcfa-551c-844a-d8ac1e96c665"
 SIRcontrol = "0c23efa9-24f1-4dcb-bd9c-3183634b0392"
 
 [compat]
+DifferentialEquations = "7.16"
 Documenter = "1"
+LaTeXStrings = "1.4"
+NLPModelsIpopt = "0.10"
+OptimalControl = "1.1"
+Plots = "1.40"
+Roots = "2.2"
