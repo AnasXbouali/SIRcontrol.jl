@@ -5,16 +5,14 @@
 \end{cases}\]</p><p>where <em>S</em>, <em>I</em> are the susceptible and infected population fractions, <em>u</em> ∈ [0, <em>ū</em>] is the intervention intensity (lockdown), <em>β</em> is the transmission rate, and <em>γ</em> is the recovery rate.</p><hr/><h3 id="Transmission-Scenarios"><a class="docs-heading-anchor" href="#Transmission-Scenarios">Transmission Scenarios</a><a id="Transmission-Scenarios-1"></a><a class="docs-heading-anchor-permalink" href="#Transmission-Scenarios" title="Permalink"></a></h3><p>We analyze two transmission cases:</p><p><strong>1. Constant <em>β</em>:</strong></p><p class="math-container">\[\beta(t) = \beta_0 \quad \forall t \geq 0\]</p><p><strong>2. Piecewise Constant <em>β</em>:</strong></p><p class="math-container">\[\beta(t) = \begin{cases}
 \beta_1 &amp; \text{if } 0 \leq t &lt; T_c \\
 \beta_2 &amp; \text{if } t \geq T_c
-\end{cases}\]</p><p>where <em>T</em>c is the time when the transmission rate <em>β</em> changes.</p><hr/><h2 id="Optimal-Control-Formulation"><a class="docs-heading-anchor" href="#Optimal-Control-Formulation">Optimal Control Formulation</a><a id="Optimal-Control-Formulation-1"></a><a class="docs-heading-anchor-permalink" href="#Optimal-Control-Formulation" title="Permalink"></a></h2><h3 id="Objective"><a class="docs-heading-anchor" href="#Objective">Objective</a><a id="Objective-1"></a><a class="docs-heading-anchor-permalink" href="#Objective" title="Permalink"></a></h3><p>Our goal: <strong>Minimize the final epidemic size</strong> = maximize <em>S</em>(∞).</p><p class="math-container">\[J(u) = S(\infty) = \lim_{t \to \infty} S(t)\]</p><blockquote><p><strong>Note:</strong> We deal with a non-standard cost function.</p></blockquote><hr/><h3 id="Constraints"><a class="docs-heading-anchor" href="#Constraints">Constraints</a><a id="Constraints-1"></a><a class="docs-heading-anchor-permalink" href="#Constraints" title="Permalink"></a></h3><p>We impose an <strong>L¹ budget constraint</strong> on the intervention:</p><p class="math-container">\[\|u(\cdot)\|_{L^1} = \int_0^{\infty} u(t) \, dt \leq K\]</p><p>where <em>K</em> &gt; 0 is the total budget and <em>ū</em> is the control upper bound.</p><blockquote><p>This approach extends optimal control problems by requiring that each intervention occur within an interval of the form [<em>t</em>, <em>t</em> + <em>δ</em>], where <em>t</em> is a decision variable.</p></blockquote><p>Precisely, we consider the following set of admissible controls:</p><p class="math-container">\[\mathcal{U} = \left\{u : [0,\infty) \to [0,\bar{u}] \,\Big|\, u \text{ is measurable and } \|u\|_{L^1} \leq K \right\}\]</p><hr/><h2 id="Reproducibility"><a class="docs-heading-anchor" href="#Reproducibility">Reproducibility</a><a id="Reproducibility-1"></a><a class="docs-heading-anchor-permalink" href="#Reproducibility" title="Permalink"></a></h2><details><summary>The documentation of this package was built using these direct dependencies,</summary><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Status `~/work/SIRcontrol.jl/SIRcontrol.jl/docs/Project.toml`
-  [0c46a032] DifferentialEquations v7.16.1
-  [e30172f5] Documenter v1.15.0
-  [b964fa9f] LaTeXStrings v1.4.0
-⌅ [f4238b75] NLPModelsIpopt v0.10.4
-  [5f98b655] OptimalControl v1.1.4
-  [91a5bcdd] Plots v1.41.1
-  [f2b01f46] Roots v2.2.10
-  [0c23efa9] SIRcontrol v0.1.5 `~/work/SIRcontrol.jl/SIRcontrol.jl`
-Info Packages marked with ⌅ have new versions available but compatibility constraints restrict them from upgrading. To see why use `status --outdated`</code></pre></details><details><summary>and using this machine and Julia version.</summary><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Julia Version 1.12.1
+\end{cases}\]</p><p>where <em>T</em>c is the time when the transmission rate <em>β</em> changes.</p><hr/><h2 id="Optimal-Control-Formulation"><a class="docs-heading-anchor" href="#Optimal-Control-Formulation">Optimal Control Formulation</a><a id="Optimal-Control-Formulation-1"></a><a class="docs-heading-anchor-permalink" href="#Optimal-Control-Formulation" title="Permalink"></a></h2><h3 id="Objective"><a class="docs-heading-anchor" href="#Objective">Objective</a><a id="Objective-1"></a><a class="docs-heading-anchor-permalink" href="#Objective" title="Permalink"></a></h3><p>Our goal: <strong>Minimize the final epidemic size</strong> = maximize <em>S</em>(∞).</p><p class="math-container">\[J(u) = S(\infty) = \lim_{t \to \infty} S(t)\]</p><blockquote><p><strong>Note:</strong> We deal with a non-standard cost function.</p></blockquote><hr/><h3 id="Constraints"><a class="docs-heading-anchor" href="#Constraints">Constraints</a><a id="Constraints-1"></a><a class="docs-heading-anchor-permalink" href="#Constraints" title="Permalink"></a></h3><p>We impose an <strong>L¹ budget constraint</strong> on the intervention:</p><p class="math-container">\[\|u(\cdot)\|_{L^1} = \int_0^{\infty} u(t) \, dt \leq K\]</p><p>where <em>K</em> &gt; 0 is the total budget and <em>ū</em> is the control upper bound.</p><blockquote><p>This approach extends optimal control problems by requiring that each intervention occur within an interval of the form [<em>t</em>, <em>t</em> + <em>δ</em>], where <em>t</em> is a decision variable.</p></blockquote><p>Precisely, we consider the following set of admissible controls:</p><p class="math-container">\[\mathcal{U} = \left\{u : [0,\infty) \to [0,\bar{u}] \,\Big|\, u \text{ is measurable and } \|u\|_{L^1} \leq K \right\}\]</p><hr/><h2 id="Reproducibility"><a class="docs-heading-anchor" href="#Reproducibility">Reproducibility</a><a id="Reproducibility-1"></a><a class="docs-heading-anchor-permalink" href="#Reproducibility" title="Permalink"></a></h2><div class="markdown"><p>You can download the exact environment used to build this documentation:</p>
+<ul>
+<li><p>📦 <a href="assets/./Project.toml">Project.toml</a> - Package dependencies</p>
+</li>
+<li><p>📋 <a href="assets/./Manifest.toml">Manifest.toml</a> - Complete dependency tree with versions</p>
+</li>
+</ul>
+</div><details style="margin-bottom: 0.5em; margin-top: 1em;"><summary>ℹ️ Version info</summary><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Julia Version 1.12.1
 Commit ba1e628ee49 (2025-10-17 13:02 UTC)
 Build Info:
   Official https://julialang.org release
@@ -26,7 +24,16 @@ Platform Info:
   GC: Built with stock GC
 Threads: 1 default, 1 interactive, 1 GC (on 4 virtual cores)
 Environment:
-  JULIA_PKG_SERVER_REGISTRY_PREFERENCE = eager</code></pre></details><details><summary>A more complete overview of all dependencies and their versions is also provided.</summary><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Status `~/work/SIRcontrol.jl/SIRcontrol.jl/docs/Manifest.toml`
+  JULIA_PKG_SERVER_REGISTRY_PREFERENCE = eager</code></pre></details><details style="margin-bottom: 0.5em;"><summary>📦 Package status</summary><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Status `~/work/SIRcontrol.jl/SIRcontrol.jl/docs/Project.toml`
+  [0c46a032] DifferentialEquations v7.16.1
+  [e30172f5] Documenter v1.15.0
+  [b964fa9f] LaTeXStrings v1.4.0
+⌅ [f4238b75] NLPModelsIpopt v0.10.4
+  [5f98b655] OptimalControl v1.1.4
+  [91a5bcdd] Plots v1.41.1
+  [f2b01f46] Roots v2.2.10
+  [0c23efa9] SIRcontrol v0.1.5 `~/work/SIRcontrol.jl/SIRcontrol.jl`
+Info Packages marked with ⌅ have new versions available but compatibility constraints restrict them from upgrading. To see why use `status --outdated`</code></pre></details><details style="margin-bottom: 0.5em;"><summary>📚 Complete manifest</summary><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Status `~/work/SIRcontrol.jl/SIRcontrol.jl/docs/Manifest.toml`
   [54578032] ADNLPModels v0.8.13
   [47edcb42] ADTypes v1.18.0
   [a4c015fc] ANSIColoredPrinters v0.0.1
@@ -118,7 +125,7 @@ Environment:
   [34c5aeac] HSL v0.5.1
   [cd3eb016] HTTP v1.10.19
   [34004b35] HypergeometricFunctions v0.3.28
-  [b5f81e59] IOCapture v0.2.5
+⌅ [b5f81e59] IOCapture v0.2.5
   [615f187c] IfElse v0.1.1
   [d25df0c9] Inflate v0.1.5
   [a98d9a8b] Interpolations v0.16.2
@@ -230,7 +237,7 @@ Environment:
   [ae029012] Requires v1.3.1
   [ae5879a3] ResettableStacks v1.1.1
   [37e2e3b7] ReverseDiff v1.16.1
-⌅ [79098fc4] Rmath v0.8.2
+  [79098fc4] Rmath v0.9.0
   [f2b01f46] Roots v2.2.10
   [7e49a35a] RuntimeGeneratedFunctions v0.5.15
   [94e857df] SIMDTypes v0.1.0
@@ -260,7 +267,7 @@ Environment:
   [10745b16] Statistics v1.11.1
   [82ae8749] StatsAPI v1.7.1
   [2913bbd2] StatsBase v0.34.7
-  [4c63d2b9] StatsFuns v1.5.1
+  [4c63d2b9] StatsFuns v1.5.2
   [9672c7b4] SteadyStateDiffEq v2.7.0
   [789caeaf] StochasticDiffEq v6.83.0
   [7792a7ef] StrideArraysCore v0.5.8
@@ -421,4 +428,4 @@ Environment:
   [8e850b90] libblastrampoline_jll v5.15.0+0
   [8e850ede] nghttp2_jll v1.64.0+1
   [3f19e933] p7zip_jll v17.5.0+2
-Info Packages marked with ⌃ and ⌅ have new versions available. Those with ⌃ may be upgradable, but those with ⌅ are restricted by compatibility constraints from upgrading. To see why use `status --outdated -m`</code></pre></details><p>You can also download the <a href="https://github.com/control-toolbox/SIRcontrol.jl/tree/gh-pages/v0.1.5/assets/Manifest.toml">manifest</a> file and the <a href="https://github.com/control-toolbox/SIRcontrol.jl/tree/gh-pages/v0.1.5/assets/Project.toml">project</a> file.</p></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="constant_infection.html">Constant β »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.15.0 on <span class="colophon-date" title="Wednesday 22 October 2025 21:11">Wednesday 22 October 2025</span>. Using Julia version 1.12.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+Info Packages marked with ⌃ and ⌅ have new versions available. Those with ⌃ may be upgradable, but those with ⌅ are restricted by compatibility constraints from upgrading. To see why use `status --outdated -m`</code></pre></details></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="constant_infection.html">Constant β »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.15.0 on <span class="colophon-date" title="Thursday 23 October 2025 11:50">Thursday 23 October 2025</span>. Using Julia version 1.12.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
