@@ -1,38 +1,38 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Piecewise constant β · SIRcontrol</title><meta name="title" content="Piecewise constant β · SIRcontrol"/><meta property="og:title" content="Piecewise constant β · SIRcontrol"/><meta property="twitter:title" content="Piecewise constant β · SIRcontrol"/><meta name="description" content="Documentation for SIRcontrol."/><meta property="og:description" content="Documentation for SIRcontrol."/><meta property="twitter:description" content="Documentation for SIRcontrol."/><script data-outdated-warner src="assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="assets/documenter.js"></script><script src="search_index.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="assets/themeswap.js"></script><link href="https://control-toolbox.org/assets/css/documentation.css" rel="stylesheet" type="text/css"/><script src="https://control-toolbox.org/assets/js/documentation.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="index.html">SIRcontrol</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="index.html">Introduction</a></li><li><a class="tocitem" href="constant_infection.html">Constant β</a></li><li class="is-active"><a class="tocitem" href="variable_infection.html">Piecewise constant β</a><ul class="internal"><li><a class="tocitem" href="#case-1:-\\beta_1-\\beta_2-(two-interventions)"><span>case 1: <span>$\beta_1 &gt; \beta_2$</span> (two interventions)</span></a></li><li><a class="tocitem" href="#case-2:-\\beta_1-\\beta_2-(one-interventions)"><span>case 2: <span>$\beta_1 &gt; \beta_2$</span> (one interventions)</span></a></li><li><a class="tocitem" href="#case-3:-\\beta_1-\\beta_2-(two-interventions)"><span>case 3: <span>$\beta_1 &lt; \beta_2$</span> (two interventions)</span></a></li><li><a class="tocitem" href="#case-4:-\\beta_1-\\beta_2-(one-interventions)"><span>case 4: <span>$\beta_1 &lt; \beta_2$</span> (one interventions)</span></a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href="variable_infection.html">Piecewise constant β</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href="variable_infection.html">Piecewise constant β</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/AnasXbouali/SIRcontrol.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><pre><code class="language-julia hljs">using OptimalControl
 using NLPModelsIpopt
-using DifferentialEquations
 using Plots
 using Plots.PlotMeasures
 using LaTeXStrings
 using Roots</code></pre><p>We consider a piecewise constant transmission rate that is given by</p><p class="math-container">\[\beta(t) = \begin{cases}
 \beta_1, \quad \text{if } t &lt; T_c \\[5pt]
 \beta_2, \quad \text{if } t &gt; T_c,
-\end{cases}\]</p><p>Furthermore, we consider its regularization using a sigmoid function:</p><pre><code class="language-julia hljs">function beta(t, τ, β1, β2, k)
-    return β1 + (β2 - β1) / (1 + exp(-k * (t - τ)))
-end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">beta (generic function with 1 method)</code></pre><pre><code class="language-julia hljs">function beta_(t)
-    if t&lt;=150
-        return 0.8
-    else
-        return 0.4
-    end
-end
-
-plot(beta_ , 0, 300, label = L&quot;$\beta$&quot;, color = :black, lw = 5,
-    grid = true,
-    gridlinewidth = 1.5,
-        size = (1600, 1000),
-    legendfontsize = 24,
-    tickfontsize = 20,
-    guidefontsize = 26,
-    framestyle = :box,
-    foreground_color_subplot = :black
-)
-plot!(t -&gt; beta(t, 150, 0.8, 0.4, 3), label = L&quot;$\beta_1$&quot;,
-color = :orange, linestyle = :dash, lw = 5)
-plot!(t -&gt; beta(t, 150, 0.8, 0.4, 300), label = L&quot;$\beta_{300}$&quot;,
-color = :red, linestyle = :dash, lw = 5)
-xlims!(139, 161)</code></pre><img src="variable_infection-6719bb39.svg" alt="Example block output"/><pre><code class="language-julia hljs">tf   = 700
+\end{cases}\]</p><p>Since β is discontinuous, we use an augmentation technique, which allows to rewrite trajectories defined over [0,T<em>c] and [T</em>c,T] in a common interval [0,1]. The variable change is the following:</p><p class="math-container">\[\left\{
+\begin{array}{l}
+(S_1(s), I_1(s), C_1(s)) = (S, I, C)(sT_c), \\[0.3em]
+(S_2(s), I_2(s), C_2(s)) = (S, I, C)\big(s(T-T_c) + T_c\big), \\[0.3em]
+u_1(s) = u(sT_c), \quad u_2(s) = u\big(s(T-T_c) + T_c\big),
+\end{array}
+\right.
+\qquad s \in [0,1].\]</p><p>Hence, the (augmented) control system is given by</p><p class="math-container">\[\left\{
+\begin{array}{lcl}
+\dot S_1 &amp;=&amp; -T_c (1-u_1)\beta_1 S_1 I_1, \\[0.3em]
+\dot I_1 &amp;=&amp; T_c\big((1-u_1)\beta_1 S_1 I_1 - \gamma I_1\big), \\[0.3em]
+\dot C_1 &amp;=&amp; -T_c u_1, \\[0.3em]
+\dot S_2 &amp;=&amp; -(T-T_c)(1-u_2)\beta_2 S_2 I_2, \\[0.3em]
+\dot I_2 &amp;=&amp; (T-T_c)\big((1-u_2)\beta_2 S_2 I_2 - \gamma I_2\big), \\[0.3em]
+\dot C_2 &amp;=&amp; -(T-T_c)u_2,
+\end{array}
+\right.
+\qquad s \in [0,1].\]</p><p>Furthermore, the initial conditions write as follows</p><p class="math-container">\[S_1(0)=S_0,\quad I_1(0)=I_0,\quad C_1(0)=K,\]</p><p>and to ensure continuity of the state variables, we impose the following constraints:</p><p class="math-container">\[S_2(0)=S_1(1),\quad I_2(0)=I_1(1),\quad C_2(0)=C_1(1),\]</p><p>the terminal condition becomes</p><p class="math-container">\[C_1(1)\ge 0,\quad C_2(1)\ge 0.\]</p><p>Thus, this procedure allows to reduce Problem 𝒫_S (with piecewise constant β) to an equivalent optimal control problem with smooth dynamics (given above) that writes</p><p class="math-container">\[\sup_{(u_1(\cdot),u_2(\cdot)) \in \mathcal{U}} S_2(1)\]</p><p>with u₁(s), u₂(s) ∈ [0,ū] for a.e. s∈[0,1].</p><p>Finally, to recover the original state variables (S, I, C) and the control function u on [0,T], we use the inverse change of variables:</p><p class="math-container">\[(S(t), I(t), C(t)) =
+\begin{cases}
+(S_1, I_1, C_1)\big(\tfrac{t}{T_c}\big), &amp; t \in [0,T_c],\\[0.5em]
+(S_2, I_2, C_2)\big(\tfrac{t-T_c}{T-T_c}\big), &amp; t \in [T_c,T],
+\end{cases}\]</p><p class="math-container">\[u(t) =
+\begin{cases}
+u_1\big(\tfrac{t}{T_c}\big), &amp; t \in [0,T_c],\\[0.5em]
+u_2\big(\tfrac{t-T_c}{T-T_c}\big), &amp; t \in [T_c,T].
+\end{cases}\]</p><pre><code class="language-julia hljs">tf   = 700
 τ     = 50
 γ    = 0.15
 Q     = 35
@@ -42,222 +42,186 @@ umax = 0.8
 β2   = [0.2, 0.4, 0.8, 0.8]
 
 S0   = 0.999
-I0   = 0.001</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">0.001</code></pre><pre><code class="language-julia hljs">function SIRocp2beta(T, S0, I0, Q, τ, β1, β2, γ, umax,k)
+I0   = 0.001</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">0.001</code></pre><pre><code class="language-julia hljs">function SIRocp2beta(T, S0, I0, Q, τ, β1, β2, γ, umax)
 
 	ocp = @def begin
-	        t ∈ [0, T], time
-	        x = (S, I, C) ∈ R^3, state
-	        u ∈ R, control
+	        t ∈ [0, 1], time
+	        x = (S1, I1, C1, S2, I2, C2) ∈ R^6, state
+	        ω = [u1, u2] ∈ R^2, control
 
-	        S(0) == S0
-	        I(0) == I0
-	        C(0) == Q
+	        S1(0) == S0
+	        I1(0) == I0
+	        C1(0) == Q
+            S2(0) - S1(1) == 0.0
+	        I2(0) - I1(1) == 0.0
+	        C2(0) - C1(1) == 0.0
 
-	        C(T) ≥ 0.0
+	        C1(1) ≥ 0.0
+            C2(1) ≥ 0.0
 
-	        0 ≤ u(t) ≤ umax
+	        0 ≤ u1(t) ≤ umax
+	        0 ≤ u2(t) ≤ umax
 
-	        0.0 ≤ I(t) ≤ 1.0
-	        0.0 ≤ S(t) ≤ 1.0
+	        0.0 ≤ I1(t) ≤ 1.0
+	        0.0 ≤ S1(t) ≤ 1.0
+            0.0 ≤ I2(t) ≤ 1.0
+	        0.0 ≤ S2(t) ≤ 1.0
 
-	        ẋ(t) == [-(1 - u(t)) * beta(t, τ, β1, β2, k) * S(t) * I(t),
-	                  (1 - u(t)) * beta(t, τ, β1, β2, k) * S(t) * I(t) - γ * I(t),
-	                -u(t)]
+	        ẋ(t) == [-τ * (1 - u1(t)) * β1 * S1(t) * I1(t),
+	                  τ * ((1 - u1(t)) * β1 * S1(t) * I1(t) - γ * I1(t)),
+	                 -τ * u1(t),
+                     -(T-τ) * (1 - u2(t)) * β2 * S2(t) * I2(t),
+	                  (T-τ) * ((1 - u2(t)) * β2 * S2(t) * I2(t) - γ * I2(t)),
+	                 -(T-τ) * u2(t)
+                    ]
 
-	        -S(T) → min
+	        -S2(1) → min
 	end
 
 	sol = nothing
-	for N in [50, 100 ,600, 4000]
-	    sol = solve(ocp, :direct, :adnlp, :ipopt;
-	                    disc_method = :gauss_legendre_3,
-	                    grid_size=N,
+	sol = solve(ocp, :direct, :adnlp, :ipopt;
+	                    disc_method = :midpoint,
+	                    grid_size=50,
 	                    init=sol,
-                        tol=1e-8,
-	                    display=true)
-	end
+                        tol=1e-8)
+    sol = solve(ocp, :direct, :adnlp, :ipopt;
+	                    disc_method = :midpoint,
+	                    grid_size=500,
+	                    init=sol,
+                        tol=1e-8)
+    sol = solve(ocp, :direct, :adnlp, :ipopt;
+	                    disc_method = :midpoint,
+	                    grid_size=2000,
+	                    init=sol,
+                        tol=1e-6)
+    sol = solve(ocp, :direct, :adnlp, :ipopt;
+	                    disc_method = :midpoint,
+	                    grid_size=2000,
+	                    init=sol,
+                        tol=1e-9)
+    sol = solve(ocp, :direct, :adnlp, :ipopt;
+	                    disc_method = :midpoint,
+	                    grid_size=4000,
+	                    init=sol,
+                        tol=1e-6)
+	sol = solve(ocp, :direct, :adnlp, :ipopt;
+	                    disc_method = :midpoint,
+	                    grid_size=4000,
+	                    init=sol,
+                        tol=1e-8)
+
 	return sol
-end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">SIRocp2beta (generic function with 1 method)</code></pre><pre><code class="language-julia hljs">k=300
-sol1 = SIRocp2beta(tf, S0, I0, Q, τ, β1[1], β2[1], γ, umax, k)
-sol2 = SIRocp2beta(tf, S0, I0, Q, τ, β1[2], β2[2], γ, umax, k)
-sol3 = SIRocp2beta(tf, S0, I0, Q, τ, β1[3], β2[3], γ, umax, k)
-sol4 = SIRocp2beta(tf, S0, I0, Q, τ, β1[4], β2[4], γ, umax, k)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">• Solver:
-  ✓ Successful  : false
-  │  Status     : max_iter
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">SIRocp2beta (generic function with 1 method)</code></pre><pre><code class="language-julia hljs">sol1 = SIRocp2beta(tf, S0, I0, Q, τ, β1[1], β2[1], γ, umax)
+sol2 = SIRocp2beta(tf, S0, I0, Q, τ, β1[2], β2[2], γ, umax)
+sol3 = SIRocp2beta(tf, S0, I0, Q, τ, β1[3], β2[3], γ, umax)
+sol4 = SIRocp2beta(tf, S0, I0, Q, τ, β1[4], β2[4], γ, umax)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">• Solver:
+  ✓ Successful  : true
+  │  Status     : first_order
   │  Message    : Ipopt/generic
-  │  Iterations : 1000
-  │  Objective  : -0.15747145956195732
-  └─ Constraints violation : 3.798546410421376e-9
+  │  Iterations : 33
+  │  Objective  : -0.15747350377927116
+  └─ Constraints violation : 6.695199950002007e-13
 
-• Boundary duals: [-0.022430441583177276, 0.6874388047764505, 0.0021646988840928684, -0.002164698884092792]
-</code></pre><h2 id="case-1:-\\beta_1-\\beta_2-(two-interventions)"><a class="docs-heading-anchor" href="#case-1:-\\beta_1-\\beta_2-(two-interventions)">case 1: <span>$\beta_1 &gt; \beta_2$</span> (two interventions)</a><a id="case-1:-\\beta_1-\\beta_2-(two-interventions)-1"></a><a class="docs-heading-anchor-permalink" href="#case-1:-\\beta_1-\\beta_2-(two-interventions)" title="Permalink"></a></h2><pre><code class="language-julia hljs">function Sh1(t)
-    if t&lt;=τ
-        return γ/β1[1]
-    else
-        return γ/β2[1]
-    end
-end
+• Boundary duals: [-0.021572705010129582, 0.6791508488924164, 0.002101257269455521, -0.02617672232940827, -0.033799347824323145, 0.0021012572691699065, -2.8561440826445586e-13, -0.0021012572691699065]
+</code></pre><pre><code class="language-julia hljs"># Function to recover trajectories from solution
+function recover_trajectories(sol, T, τ)
+    S1(t) = state(sol)(t)[1]
+    I1(t) = state(sol)(t)[2]
+    C1(t) = state(sol)(t)[3]
+    S2(t) = state(sol)(t)[4]
+    I2(t) = state(sol)(t)[5]
+    C2(t) = state(sol)(t)[6]
+    u1(t) = control(sol)(t)[1]
+    u2(t) = control(sol)(t)[2]
 
-gr()
+    # Define trajectories over [0, T]
+    S(t) = t ≤ τ ? S1(t/τ) : S2((t-τ)/(T-τ))
+    I(t) = t ≤ τ ? I1(t/τ) : I2((t-τ)/(T-τ))
+    C(t) = t ≤ τ ? C1(t/τ) : C2((t-τ)/(T-τ))
+    u(t) = t ≤ τ ? u1(t/τ) : u2((t-τ)/(T-τ))
 
+    return S, I, C, u
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">recover_trajectories (generic function with 1 method)</code></pre><pre><code class="language-julia hljs"># Function to create styled plot for a solution
+function plot_solution(sol, T, τ, β1_val, β2_val, γ, problem_num; legend_position=:right)
+    # Recover trajectories
+    S, I, C, u = recover_trajectories(sol, T, τ)
 
-plot(
-    t -&gt; state(sol1)(t)[1], 0, tf,
-    label = false, color = :darkblue, lw = 5,
-    grid = true,
-    gridlinewidth = 1.5,
-    size = (1600, 1000),
-    legendfontsize = 24,
-    tickfontsize = 20,
-    guidefontsize = 26,
-    framestyle = :box,
-    foreground_color_subplot = :black
-)
+    # Time grid for plotting
+    t_plot = range(0, T, length=8000)
+    S_vals = S.(t_plot)
+    I_vals = I.(t_plot)
+    C_vals = C.(t_plot)
+    u_vals = u.(t_plot)
 
-plot!(
-    t -&gt; state(sol1)(t)[2], 0, tf,
-    label = false, color = :darkgreen, lw = 5
-)
+    # Threshold function
+    Sh(t) = t &lt; τ ? γ/β1_val : γ/β2_val
 
+    # Create plot
+    p = plot(t_plot, S_vals,
+         label=L&quot;$S$&quot;,
+         xlabel=L&quot;Time $t$&quot;,
+         linewidth=2.5,
+         legend=legend_position,
+         color=:blue,
+         framestyle=:box,
+         grid = false,
+         size=(900, 500),
+         dpi=300,
+         left_margin=8mm,
+         bottom_margin=6mm,
+         top_margin=3mm,
+         right_margin=5mm,
+         foreground_color_legend=:black,
+         background_color_legend=:white,
+         legend_foreground_color=:black,
+         legendfontsize=18,
+         tickfontsize=15,
+         guidefontsize=15)
 
-plot!(
-    t -&gt; control(sol1)(t)[1], 0, tf,
-    label = false, color = :darkred, lw = 5
-)
+    plot!(t_plot, I_vals,
+          label=L&quot;$I$&quot;,
+          linewidth=2.5,
+          color=:green)
 
-plot!(t -&gt; Sh1(t), 0, tf,
-    label = false, color = :black, ls = :dash, lw = 3
-)
+    plot!(t_plot, u_vals,
+          label=L&quot;$u$&quot;,
+          linewidth=2.5,
+          color=:red)
 
-plot!([NaN], [NaN], label = L&quot;$S$&quot;,       lw = 2, color = :darkblue)
-plot!([NaN], [NaN], label = L&quot;$I$&quot;,       lw = 2, color = :darkgreen)
-plot!([NaN], [NaN], label = L&quot;$S_h$&quot;,   lw = 1.5, ls = :dash, color = :black)
-plot!([NaN], [NaN], label = L&quot;$u$&quot;,       lw = 2, color = :darkred)
-xlims!(0, 126)</code></pre><img src="variable_infection-52180cb5.svg" alt="Example block output"/><h2 id="case-2:-\\beta_1-\\beta_2-(one-interventions)"><a class="docs-heading-anchor" href="#case-2:-\\beta_1-\\beta_2-(one-interventions)">case 2: <span>$\beta_1 &gt; \beta_2$</span> (one interventions)</a><a id="case-2:-\\beta_1-\\beta_2-(one-interventions)-1"></a><a class="docs-heading-anchor-permalink" href="#case-2:-\\beta_1-\\beta_2-(one-interventions)" title="Permalink"></a></h2><pre><code class="language-julia hljs">function Sh2(t)
-    if t&lt;=τ
-        return γ/β1[2]
-    else
-        return γ/β2[2]
-    end
-end
-gr()
+    plot!(t -&gt; Sh(t),
+          label=L&quot;$S_h$&quot;,
+          linestyle=:dash,
+          color=:black,
+          linewidth=1.5)
 
-plot(
-    t -&gt; state(sol2)(t)[1], 0, tf,
-    label = false, color = :darkblue, lw = 5,
-    grid = true,
-    gridlinewidth = 1.5,
-    size = (1600, 1000),
-    legendfontsize = 24,
-    tickfontsize = 20,
-    guidefontsize = 26,
-    framestyle = :box,
-    foreground_color_subplot = :black
-)
+    xlims!(0, 120)
+    ylims!(0, 1.05)
 
-plot!(
-    t -&gt; state(sol2)(t)[2], 0, tf,
-    label = false, color = :darkgreen, lw = 5
-)
+    default_ticks = 0:20:120
+    tick_positions = sort(unique(vcat(collect(default_ticks), τ)))
+    tick_labels = [t == τ ? L&quot;$T_c$&quot; : string(Int(t)) for t in tick_positions]
+    xticks!(tick_positions, tick_labels)
 
+    # Add vertical gridlines at all positions except τ
+    vline!(filter(x -&gt; x != τ, tick_positions),
+           color=:gray,
+           linewidth=0.5,
+           alpha=0.7,
+           label=&quot;&quot;)
 
-plot!(
-    t -&gt; control(sol2)(t)[1], 0, tf,
-    label = false, color = :darkred, lw = 5
-)
+    # Add horizontal gridlines
+    hline!(0:0.1:1.0,
+           color=:gray,
+           linewidth=0.5,
+           alpha=0.7,
+           label=&quot;&quot;)
 
-plot!(t -&gt; Sh2(t), 0, tf,
-    label = false, color = :black, ls = :dash, lw = 3
-)
+    plot!([τ, τ],
+          [0, γ / max(β1_val, β2_val)],
+          color = :black,
+          linestyle = :dot,
+          linewidth = 1.0,
+          label = false)
 
-#vline!(
-#    [τ], lw = 3, color = :black, linestyle = :dashdot, label = false
-#)
-
-plot!([NaN], [NaN], label = L&quot;$S$&quot;,       lw = 2, color = :darkblue)
-plot!([NaN], [NaN], label = L&quot;$I$&quot;,       lw = 2, color = :darkgreen)
-plot!([NaN], [NaN], label = L&quot;$S_h$&quot;,   lw = 1.5, ls = :dash, color = :black)
-plot!([NaN], [NaN], label = L&quot;$u$&quot;,       lw = 2, color = :darkred)
-xlims!(0,106)</code></pre><img src="variable_infection-2ff2f890.svg" alt="Example block output"/><h2 id="case-3:-\\beta_1-\\beta_2-(two-interventions)"><a class="docs-heading-anchor" href="#case-3:-\\beta_1-\\beta_2-(two-interventions)">case 3: <span>$\beta_1 &lt; \beta_2$</span> (two interventions)</a><a id="case-3:-\\beta_1-\\beta_2-(two-interventions)-1"></a><a class="docs-heading-anchor-permalink" href="#case-3:-\\beta_1-\\beta_2-(two-interventions)" title="Permalink"></a></h2><pre><code class="language-julia hljs">function Sh3(t)
-    if t&lt;=τ
-        return γ/β1[3]
-    else
-        return γ/β2[3]
-    end
-end
-gr()
-plot(
-    t -&gt; state(sol3)(t)[1], 0, tf,
-    label = false, color = :darkblue, lw = 5,
-    grid = true,
-    gridlinewidth = 1.5,
-    size = (1600, 1000),
-    legendfontsize = 24,
-    tickfontsize = 20,
-    guidefontsize = 26,
-    framestyle = :box,
-    foreground_color_subplot = :black
-)
-
-plot!(
-    t -&gt; state(sol3)(t)[2], 0, tf,
-    label = false, color = :darkgreen, lw = 5
-)
-
-plot!(
-    t -&gt; control(sol3)(t)[1], 0, tf,
-    label = false, color = :darkred, lw = 5
-)
-plot!(t -&gt; Sh3(t), 0, tf,
-    label = false, color = :black, ls = :dash, lw = 3
-)
-
-# Dummy legend entries
-plot!([NaN], [NaN], label = L&quot;$S$&quot;,       lw = 2, color = :darkblue)
-plot!([NaN], [NaN], label = L&quot;$I$&quot;,       lw = 2, color = :darkgreen)
-plot!([NaN], [NaN], label = L&quot;$S_h$&quot;,   lw = 1.5, ls = :dash, color = :black)
-plot!([NaN], [NaN], label = L&quot;$u$&quot;,       lw = 2, color = :darkred)
-xlims!(0, 126)</code></pre><img src="variable_infection-2ab79fb1.svg" alt="Example block output"/><h2 id="case-4:-\\beta_1-\\beta_2-(one-interventions)"><a class="docs-heading-anchor" href="#case-4:-\\beta_1-\\beta_2-(one-interventions)">case 4: <span>$\beta_1 &lt; \beta_2$</span> (one interventions)</a><a id="case-4:-\\beta_1-\\beta_2-(one-interventions)-1"></a><a class="docs-heading-anchor-permalink" href="#case-4:-\\beta_1-\\beta_2-(one-interventions)" title="Permalink"></a></h2><pre><code class="language-julia hljs">function Sh4(t)
-    if t&lt;=τ
-        return γ/β1[4]
-    else
-        return γ/β2[4]
-    end
-end
-
-gr()
-
-plot(
-    t -&gt; state(sol4)(t)[1], 0, tf,
-    label = false, color = :darkblue, lw = 5,
-    grid = true,
-    gridlinewidth = 1.5,
-    size = (1600, 1000),
-    legendfontsize = 24,
-    tickfontsize = 20,
-    guidefontsize = 26,
-    framestyle = :box,
-    foreground_color_subplot = :black
-)
-
-plot!(
-    t -&gt; state(sol4)(t)[2], 0, tf,
-    label = false, color = :darkgreen, lw = 5
-)
-
-
-plot!(
-    t -&gt; control(sol4)(t)[1], 0, tf,
-    label = false, color = :darkred, lw = 5
-)
-
-plot!(t -&gt; Sh4(t), 0, tf,
-    label = false, color = :black, ls = :dash, lw = 3
-)
-
-
-plot!([NaN], [NaN], label = L&quot;$S$&quot;,       lw = 2, color = :darkblue)
-plot!([NaN], [NaN], label = L&quot;$I$&quot;,       lw = 2, color = :darkgreen)
-plot!([NaN], [NaN], label = L&quot;$S_h$&quot;,   lw = 2, ls = :dash, color = :black)
-plot!([NaN], [NaN], label = L&quot;$u$&quot;,       lw = 2, color = :darkred)
-xlims!(0, 126)</code></pre><img src="variable_infection-358c3048.svg" alt="Example block output"/></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="constant_infection.html">« Constant β</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.15.0 on <span class="colophon-date" title="Friday 7 November 2025 09:34">Friday 7 November 2025</span>. Using Julia version 1.12.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+    return p
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">plot_solution (generic function with 1 method)</code></pre><h2 id="case-1:-\\beta_1-\\beta_2-(two-interventions)"><a class="docs-heading-anchor" href="#case-1:-\\beta_1-\\beta_2-(two-interventions)">case 1: <span>$\beta_1 &gt; \beta_2$</span> (two interventions)</a><a id="case-1:-\\beta_1-\\beta_2-(two-interventions)-1"></a><a class="docs-heading-anchor-permalink" href="#case-1:-\\beta_1-\\beta_2-(two-interventions)" title="Permalink"></a></h2><pre><code class="language-julia hljs">p1 = plot_solution(sol1, tf, τ, β1[1], β2[1], γ, 1)</code></pre><img src="variable_infection-318bd769.svg" alt="Example block output"/><h2 id="case-2:-\\beta_1-\\beta_2-(one-interventions)"><a class="docs-heading-anchor" href="#case-2:-\\beta_1-\\beta_2-(one-interventions)">case 2: <span>$\beta_1 &gt; \beta_2$</span> (one interventions)</a><a id="case-2:-\\beta_1-\\beta_2-(one-interventions)-1"></a><a class="docs-heading-anchor-permalink" href="#case-2:-\\beta_1-\\beta_2-(one-interventions)" title="Permalink"></a></h2><pre><code class="language-julia hljs">p2 = plot_solution(sol2, tf, τ, β1[2], β2[2], γ, 2)</code></pre><img src="variable_infection-258a9892.svg" alt="Example block output"/><h2 id="case-3:-\\beta_1-\\beta_2-(two-interventions)"><a class="docs-heading-anchor" href="#case-3:-\\beta_1-\\beta_2-(two-interventions)">case 3: <span>$\beta_1 &lt; \beta_2$</span> (two interventions)</a><a id="case-3:-\\beta_1-\\beta_2-(two-interventions)-1"></a><a class="docs-heading-anchor-permalink" href="#case-3:-\\beta_1-\\beta_2-(two-interventions)" title="Permalink"></a></h2><pre><code class="language-julia hljs">p3 = plot_solution(sol3, tf, τ, β1[3], β2[3], γ, 3)</code></pre><img src="variable_infection-5c14758f.svg" alt="Example block output"/><h2 id="case-4:-\\beta_1-\\beta_2-(one-interventions)"><a class="docs-heading-anchor" href="#case-4:-\\beta_1-\\beta_2-(one-interventions)">case 4: <span>$\beta_1 &lt; \beta_2$</span> (one interventions)</a><a id="case-4:-\\beta_1-\\beta_2-(one-interventions)-1"></a><a class="docs-heading-anchor-permalink" href="#case-4:-\\beta_1-\\beta_2-(one-interventions)" title="Permalink"></a></h2><pre><code class="language-julia hljs">p4 = plot_solution(sol4, tf, τ, β1[4], β2[4], γ, 4)</code></pre><img src="variable_infection-7efc3458.svg" alt="Example block output"/></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="constant_infection.html">« Constant β</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.15.0 on <span class="colophon-date" title="Saturday 8 November 2025 19:44">Saturday 8 November 2025</span>. Using Julia version 1.12.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
