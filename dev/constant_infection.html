@@ -48,11 +48,11 @@ sol2 = SIRocp(tf, S0, I0, Q[2], β[2], γ, umax[2])</code></pre><pre class="docu
   ✓ Successful  : true
   │  Status     : first_order
   │  Message    : Ipopt/generic
-  │  Iterations : 49
-  │  Objective  : -0.08318830571214422
-  └─ Constraints violation : 8.571480192287595e-10
+  │  Iterations : 50
+  │  Objective  : -0.08318830565579467
+  └─ Constraints violation : 8.161871178913316e-11
 
-• Boundary duals: [-0.10772459069557107, -0.09896983936669679, 0.00655292721197658, -0.00655292721197658]
+• Boundary duals: [-0.10773004245623691, -0.09965484173179816, 0.006553602293175012, -0.006553602293175012]
 </code></pre><h2 id="Case-1:-\\beta-0.6,-\\bar{u}-1-and-Q28"><a class="docs-heading-anchor" href="#Case-1:-\\beta-0.6,-\\bar{u}-1-and-Q28">Case 1: <span>$\beta = 0.6$</span>, <span>$\bar{u} = 1$</span> and <span>$Q=28$</span></a><a id="Case-1:-\\beta-0.6,-\\bar{u}-1-and-Q28-1"></a><a class="docs-heading-anchor-permalink" href="#Case-1:-\\beta-0.6,-\\bar{u}-1-and-Q28" title="Permalink"></a></h2><pre><code class="language-julia hljs">plot(
     t -&gt; state(sol1)(t)[1], 0, tf,
     label = false, color = :darkblue, lw = 5,
@@ -84,7 +84,7 @@ plot!([NaN], [NaN], label=L&quot;$S$&quot;, lw=2, color=:darkblue)
 plot!([NaN], [NaN], label=L&quot;$I$&quot;, lw=2, color=:darkgreen)
 plot!([NaN], [NaN], label=L&quot;$S_h$&quot;, lw=1.5, ls=:dash, color=:black)
 plot!([NaN], [NaN], label=L&quot;$u$&quot;, lw=2, color=:darkred)
-xlims!(0,101)</code></pre><img src="constant_infection-331a21f6.svg" alt="Example block output"/><h2 id="Case-2:-\\beta-0.9,-\\bar{u}-0.5-and-Q10"><a class="docs-heading-anchor" href="#Case-2:-\\beta-0.9,-\\bar{u}-0.5-and-Q10">Case 2: <span>$\beta = 0.9$</span>, <span>$\bar{u} = 0.5$</span> and <span>$Q=10$</span></a><a id="Case-2:-\\beta-0.9,-\\bar{u}-0.5-and-Q10-1"></a><a class="docs-heading-anchor-permalink" href="#Case-2:-\\beta-0.9,-\\bar{u}-0.5-and-Q10" title="Permalink"></a></h2><pre><code class="language-julia hljs">gr()
+xlims!(0,101)</code></pre><img src="constant_infection-ef4d3d8f.svg" alt="Example block output"/><h2 id="Case-2:-\\beta-0.9,-\\bar{u}-0.5-and-Q10"><a class="docs-heading-anchor" href="#Case-2:-\\beta-0.9,-\\bar{u}-0.5-and-Q10">Case 2: <span>$\beta = 0.9$</span>, <span>$\bar{u} = 0.5$</span> and <span>$Q=10$</span></a><a id="Case-2:-\\beta-0.9,-\\bar{u}-0.5-and-Q10-1"></a><a class="docs-heading-anchor-permalink" href="#Case-2:-\\beta-0.9,-\\bar{u}-0.5-and-Q10" title="Permalink"></a></h2><pre><code class="language-julia hljs">gr()
 plot(
     t -&gt; state(sol2)(t)[1], 0, tf,
     label = false, color = :darkblue, lw = 5,
@@ -118,8 +118,8 @@ plot!([NaN], [NaN], label = L&quot;$S$&quot;,   lw = 2, color = :darkblue)
 plot!([NaN], [NaN], label = L&quot;$I$&quot;,   lw = 2, color = :darkgreen)
 plot!([NaN], [NaN], label = L&quot;$S_h$&quot;, lw = 1.5, ls = :dash, color = :black)
 plot!([NaN], [NaN], label = L&quot;$u$&quot;,   lw = 2, color = :darkred)
-xlims!(0,101)</code></pre><img src="constant_infection-f6848e54.svg" alt="Example block output"/><pre><code class="language-julia hljs">ϕ2(t) = (costate(sol2)(t)[1]-costate(sol2)(t)[2])*β[2]*state(sol2)(t)[1]*state(sol2)(t)[2] - costate(sol2)(t)[3] # switching function
-t2 = find_zero(ϕ2, (0.0, 20), Bisection())</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">8.332110917020035</code></pre><h2 id="Case-2:-Plot-of-\\log(S(t_c))-\\log(S(t_c\\Delta))"><a class="docs-heading-anchor" href="#Case-2:-Plot-of-\\log(S(t_c))-\\log(S(t_c\\Delta))">Case 2: Plot of <span>$\log(S(t_c)) - \log(S(t_c+\Delta))$</span></a><a id="Case-2:-Plot-of-\\log(S(t_c))-\\log(S(t_c\\Delta))-1"></a><a class="docs-heading-anchor-permalink" href="#Case-2:-Plot-of-\\log(S(t_c))-\\log(S(t_c\\Delta))" title="Permalink"></a></h2><pre><code class="language-julia hljs">Δ2 = Q[2] / umax[2]
+xlims!(0,101)</code></pre><img src="constant_infection-247f2efe.svg" alt="Example block output"/><pre><code class="language-julia hljs">ϕ2(t) = (costate(sol2)(t)[1]-costate(sol2)(t)[2])*β[2]*state(sol2)(t)[1]*state(sol2)(t)[2] - costate(sol2)(t)[3] # switching function
+t2 = find_zero(ϕ2, (0.0, 20), Bisection())</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">8.33213153363438</code></pre><h2 id="Case-2:-Plot-of-\\log(S(t_c))-\\log(S(t_c\\Delta))"><a class="docs-heading-anchor" href="#Case-2:-Plot-of-\\log(S(t_c))-\\log(S(t_c\\Delta))">Case 2: Plot of <span>$\log(S(t_c)) - \log(S(t_c+\Delta))$</span></a><a id="Case-2:-Plot-of-\\log(S(t_c))-\\log(S(t_c\\Delta))-1"></a><a class="docs-heading-anchor-permalink" href="#Case-2:-Plot-of-\\log(S(t_c))-\\log(S(t_c\\Delta))" title="Permalink"></a></h2><pre><code class="language-julia hljs">Δ2 = Q[2] / umax[2]
 
 tspan = (0.0, tf)
 
@@ -180,4 +180,4 @@ plot!(
 
 plot!([NaN], [NaN], label = L&quot;t_c \mapsto \log S(t_c) - \log S(t_c + \Delta)&quot;, lw = 2, color = :blue)
 plot!([NaN], [NaN], label = L&quot;t^*&quot;, lw = 1.5, ls = :dash, color = :black)
-xlims!(0,51)</code></pre><img src="constant_infection-ae8b7f9e.svg" alt="Example block output"/></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="index.html">« Introduction</a><a class="docs-footer-nextpage" href="variable_infection.html">Piecewise constant β »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.15.0 on <span class="colophon-date" title="Saturday 8 November 2025 20:53">Saturday 8 November 2025</span>. Using Julia version 1.12.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+xlims!(0,51)</code></pre><img src="constant_infection-ac37c7f2.svg" alt="Example block output"/></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="index.html">« Introduction</a><a class="docs-footer-nextpage" href="variable_infection.html">Piecewise constant β »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.15.0 on <span class="colophon-date" title="Wednesday 12 November 2025 18:26">Wednesday 12 November 2025</span>. Using Julia version 1.12.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
