@@ -6,35 +6,37 @@ using Plots
 using Plots.PlotMeasures
 using LaTeXStrings
 using Roots</code></pre><pre><code class="language-julia hljs">function SIRocp(tf, S0, I0, Q, β, γ, umax)
-	    ocp = @def begin
-	        t ∈ [0, tf], time
-	        x = (S, I, C) ∈ R^3, state
-	        u ∈ R, control
+    ocp = @def begin
+        t ∈ [0, tf], time
+        x = (S, I, C) ∈ R^3, state
+        u ∈ R, control
 
-	        S(0) == S0
-	        I(0) == I0
-	        C(0) == Q
+        S(0) == S0
+        I(0) == I0
+        C(0) == Q
 
-	        C(tf) ≥ 0.0
+        C(tf) ≥ 0.0
 
-	        0 ≤ u(t) ≤ umax
+        0 ≤ u(t) ≤ umax
 
-	        0.0 ≤ I(t) ≤ 1.0
-	        0.0 ≤ S(t) ≤ 1.0
+        0.0 ≤ I(t) ≤ 1.0
+        0.0 ≤ S(t) ≤ 1.0
 
-	        ẋ(t) == [-(1 - u(t)) * β * S(t) * I(t),
-	                  (1 - u(t)) * β * S(t) * I(t) - γ * I(t),
-	                -u(t)]
+        ẋ(t) == [-(1 - u(t)) * β * S(t) * I(t),
+                    (1 - u(t)) * β * S(t) * I(t) - γ * I(t),
+                -u(t)]
 
-	        -S(tf) → min
-	    end
+        -S(tf) → min
+    end
 
-	    sol = solve(ocp, :direct, :adnlp, :ipopt;
-	                    disc_method = :gauss_legendre_3,
-	                    grid_size=1000,
-                            tol=1e-9,
-	                    display=true)
-            return sol
+    sol = solve(
+        ocp, :collocation, :adnlp, :ipopt;
+        scheme = :gauss_legendre_3,
+        grid_size=1000,
+        tol=1e-9,
+        display=true,
+    )
+    return sol
 end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">SIRocp (generic function with 1 method)</code></pre><pre><code class="language-julia hljs">tf   = 300
 γ    = 0.2
 S0   = 0.999
@@ -48,11 +50,11 @@ sol2 = SIRocp(tf, S0, I0, Q[2], β[2], γ, umax[2])</code></pre><pre class="docu
   ✓ Successful  : true
   │  Status     : first_order
   │  Message    : Ipopt/generic
-  │  Iterations : 50
-  │  Objective  : -0.08318830565579467
-  └─ Constraints violation : 8.161871178913316e-11
+  │  Iterations : 47
+  │  Objective  : -0.08318830567229359
+  └─ Constraints violation : 2.946319715979584e-10
 
-• Boundary duals: [-0.10773004245623691, -0.09965484173179816, 0.006553602293175012, -0.006553602293175012]
+• Boundary duals: [-0.10772836812976365, -0.09944446618005219, 0.006553394964554765, -0.006553394964554765]
 </code></pre><h2 id="Case-1:-\\beta-0.6,-\\bar{u}-1-and-Q28"><a class="docs-heading-anchor" href="#Case-1:-\\beta-0.6,-\\bar{u}-1-and-Q28">Case 1: <span>$\beta = 0.6$</span>, <span>$\bar{u} = 1$</span> and <span>$Q=28$</span></a><a id="Case-1:-\\beta-0.6,-\\bar{u}-1-and-Q28-1"></a><a class="docs-heading-anchor-permalink" href="#Case-1:-\\beta-0.6,-\\bar{u}-1-and-Q28" title="Permalink"></a></h2><pre><code class="language-julia hljs">plot(
     t -&gt; state(sol1)(t)[1], 0, tf,
     label = false, color = :darkblue, lw = 5,
@@ -84,7 +86,7 @@ plot!([NaN], [NaN], label=L&quot;$S$&quot;, lw=2, color=:darkblue)
 plot!([NaN], [NaN], label=L&quot;$I$&quot;, lw=2, color=:darkgreen)
 plot!([NaN], [NaN], label=L&quot;$S_h$&quot;, lw=1.5, ls=:dash, color=:black)
 plot!([NaN], [NaN], label=L&quot;$u$&quot;, lw=2, color=:darkred)
-xlims!(0,101)</code></pre><img src="constant_infection-ef4d3d8f.svg" alt="Example block output"/><h2 id="Case-2:-\\beta-0.9,-\\bar{u}-0.5-and-Q10"><a class="docs-heading-anchor" href="#Case-2:-\\beta-0.9,-\\bar{u}-0.5-and-Q10">Case 2: <span>$\beta = 0.9$</span>, <span>$\bar{u} = 0.5$</span> and <span>$Q=10$</span></a><a id="Case-2:-\\beta-0.9,-\\bar{u}-0.5-and-Q10-1"></a><a class="docs-heading-anchor-permalink" href="#Case-2:-\\beta-0.9,-\\bar{u}-0.5-and-Q10" title="Permalink"></a></h2><pre><code class="language-julia hljs">gr()
+xlims!(0,101)</code></pre><img src="constant_infection-1a6b9d5e.svg" alt="Example block output"/><h2 id="Case-2:-\\beta-0.9,-\\bar{u}-0.5-and-Q10"><a class="docs-heading-anchor" href="#Case-2:-\\beta-0.9,-\\bar{u}-0.5-and-Q10">Case 2: <span>$\beta = 0.9$</span>, <span>$\bar{u} = 0.5$</span> and <span>$Q=10$</span></a><a id="Case-2:-\\beta-0.9,-\\bar{u}-0.5-and-Q10-1"></a><a class="docs-heading-anchor-permalink" href="#Case-2:-\\beta-0.9,-\\bar{u}-0.5-and-Q10" title="Permalink"></a></h2><pre><code class="language-julia hljs">gr()
 plot(
     t -&gt; state(sol2)(t)[1], 0, tf,
     label = false, color = :darkblue, lw = 5,
@@ -118,8 +120,8 @@ plot!([NaN], [NaN], label = L&quot;$S$&quot;,   lw = 2, color = :darkblue)
 plot!([NaN], [NaN], label = L&quot;$I$&quot;,   lw = 2, color = :darkgreen)
 plot!([NaN], [NaN], label = L&quot;$S_h$&quot;, lw = 1.5, ls = :dash, color = :black)
 plot!([NaN], [NaN], label = L&quot;$u$&quot;,   lw = 2, color = :darkred)
-xlims!(0,101)</code></pre><img src="constant_infection-247f2efe.svg" alt="Example block output"/><pre><code class="language-julia hljs">ϕ2(t) = (costate(sol2)(t)[1]-costate(sol2)(t)[2])*β[2]*state(sol2)(t)[1]*state(sol2)(t)[2] - costate(sol2)(t)[3] # switching function
-t2 = find_zero(ϕ2, (0.0, 20), Bisection())</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">8.33213153363438</code></pre><h2 id="Case-2:-Plot-of-\\log(S(t_c))-\\log(S(t_c\\Delta))"><a class="docs-heading-anchor" href="#Case-2:-Plot-of-\\log(S(t_c))-\\log(S(t_c\\Delta))">Case 2: Plot of <span>$\log(S(t_c)) - \log(S(t_c+\Delta))$</span></a><a id="Case-2:-Plot-of-\\log(S(t_c))-\\log(S(t_c\\Delta))-1"></a><a class="docs-heading-anchor-permalink" href="#Case-2:-Plot-of-\\log(S(t_c))-\\log(S(t_c\\Delta))" title="Permalink"></a></h2><pre><code class="language-julia hljs">Δ2 = Q[2] / umax[2]
+xlims!(0,101)</code></pre><img src="constant_infection-13c64c93.svg" alt="Example block output"/><pre><code class="language-julia hljs">ϕ2(t) = (costate(sol2)(t)[1]-costate(sol2)(t)[2])*β[2]*state(sol2)(t)[1]*state(sol2)(t)[2] - costate(sol2)(t)[3] # switching function
+t2 = find_zero(ϕ2, (0.0, 20), Bisection())</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">8.33212520177594</code></pre><h2 id="Case-2:-Plot-of-\\log(S(t_c))-\\log(S(t_c\\Delta))"><a class="docs-heading-anchor" href="#Case-2:-Plot-of-\\log(S(t_c))-\\log(S(t_c\\Delta))">Case 2: Plot of <span>$\log(S(t_c)) - \log(S(t_c+\Delta))$</span></a><a id="Case-2:-Plot-of-\\log(S(t_c))-\\log(S(t_c\\Delta))-1"></a><a class="docs-heading-anchor-permalink" href="#Case-2:-Plot-of-\\log(S(t_c))-\\log(S(t_c\\Delta))" title="Permalink"></a></h2><pre><code class="language-julia hljs">Δ2 = Q[2] / umax[2]
 
 tspan = (0.0, tf)
 
@@ -180,4 +182,4 @@ plot!(
 
 plot!([NaN], [NaN], label = L&quot;t_c \mapsto \log S(t_c) - \log S(t_c + \Delta)&quot;, lw = 2, color = :blue)
 plot!([NaN], [NaN], label = L&quot;t^*&quot;, lw = 1.5, ls = :dash, color = :black)
-xlims!(0,51)</code></pre><img src="constant_infection-ac37c7f2.svg" alt="Example block output"/></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="index.html">« Introduction</a><a class="docs-footer-nextpage" href="variable_infection.html">Piecewise constant β »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.15.0 on <span class="colophon-date" title="Wednesday 12 November 2025 18:26">Wednesday 12 November 2025</span>. Using Julia version 1.12.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+xlims!(0,51)</code></pre><img src="constant_infection-362c8340.svg" alt="Example block output"/></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="index.html">« Introduction</a><a class="docs-footer-nextpage" href="variable_infection.html">Piecewise constant β »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Sunday 12 April 2026 20:59">Sunday 12 April 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
